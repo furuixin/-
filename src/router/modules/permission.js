@@ -8,8 +8,8 @@ export default {
         name:"permission",
         component: () => import('@/views/permission/index'),
         meta:{
-          icon:"",
-          title:'权限管理'
+          icon:"lock",
+          title:'权限'
         }
       }
     ]

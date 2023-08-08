@@ -8,8 +8,8 @@ export default {
         name:"approval",
         component: () => import('@/views/approval/index'),
         meta:{
-          icon:"",
-          title:'审批管理'
+          icon:"tree-table",
+          title:'审批'
         }
       }
     ]

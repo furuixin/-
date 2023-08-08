@@ -8,8 +8,8 @@ export default {
         name:"department",
         component: () => import('@/views/department/index'),
         meta:{
-          icon:"",
-          title:'组织架构'
+          icon:"tree",
+          title:'组织'
         }
       }
     ]

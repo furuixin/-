@@ -8,8 +8,8 @@ export default {
         name:"employee",
         component: () => import('@/views/employee/index'),
         meta:{
-          icon:"",
-          title:'员工管理'
+          icon:"people",
+          title:'员工'
         }
       }
     ]
