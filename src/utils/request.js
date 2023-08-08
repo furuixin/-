@@ -33,6 +33,7 @@ service.interceptors.response.use(
       // 提示错误信息
       Message({ type: "warning", message: 'token超时了' })
       // 调用退出的action
+      console.log(store);
       await store.dispatch('user/logout')
       // 跳转到登录
       router.push('/login')

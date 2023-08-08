@@ -14,7 +14,6 @@ const whiteList = ['/login', '/404'] // no redirect whitelist
 router.beforeEach(async (to, from, next) => {
   NProgress.start();
   // 1.判断是否有token
-  console.log(store.getters.token)
   if (store.getters.token) {
     // 登录状态   判断是否是登录页  是---  免登录   否   next(
     if (to.path === '/login') {
