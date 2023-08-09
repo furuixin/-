@@ -64,6 +64,7 @@ export default {
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
           await this.login({ mobile: this.ruleForm.mobile, password: this.ruleForm.password })
+          this.$router.push('/')
         } else {
           console.log('error submit!!');
           return false;
