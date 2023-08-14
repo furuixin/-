@@ -1,6 +1,8 @@
 <template>
     <!-- 社保管理 -->
-    <div class='social'></div>
+    <div class='social'>
+        123
+    </div>
 </template>
  
 <script>
