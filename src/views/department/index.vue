@@ -33,7 +33,8 @@
 </template>
  
 <script>
-import { getDepartment, delDepartment, transListToTreeData } from "@/api/department";
+import { getDepartment, delDepartment } from "@/api/department";
+import {transListToTreeData} from '@/utils/transListToTreeData'
 import addDept from './components/addDept.vue'
 export default {
     data() {
@@ -65,11 +66,15 @@ export default {
                 this.showDialog = true
                 this.currentNodeId = id
             } else if (command === 'edit') {
+                // 打开模态框
                 this.showDialog = true
+                // 将行数据的id通过属性传给子组件
                 this.currentNodeId = id
+                // 因为prop接收是异步的，也就是这个函数还没结束时子组件是拿不到父id的
                 this.$nextTick(() => {
                     this.$refs.dialog.getDepartmentDetail()
                 })
+                this.$nextTick
             } else {
                 await delDepartment(id)
                 this.getDepartment()

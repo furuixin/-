@@ -32,12 +32,12 @@
 import { getManagerList, getDepartment, addDepartment, getDepartmentDetail,updateDepartment } from '@/api/department'
 export default {
     props: {
-        showDialog: {
+        showDialog: {//是否显示
             type: Boolean, // 类型
             required: true, // 是否必须
             default: false//默认值
         },
-        pid: {
+        pid: {//获取回填数据的id
             type: Number,
             default: null
         }
@@ -83,6 +83,7 @@ export default {
         }
     },
     created() {
+        // 这个只是用来获取下拉选择器的选项，不用在意
         this.getManagerList()
     },
     methods: {
@@ -104,8 +105,11 @@ export default {
                 this.close()
             })
         },
+        // 如果是编辑的话父组件会调用这个方法使数据回填
         async getDepartmentDetail() {
+            // 这时候pid不为null了，获取详情
             let res = await getDepartmentDetail(this.pid)
+            // 回填
             this.formData = res.data
         },
         close() {

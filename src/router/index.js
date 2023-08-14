@@ -43,12 +43,12 @@ import salary from '@/router/modules/salary'
 import social from '@/router/modules/social'
 
 const MyRoutes = [
+  department,
+  role,
+  employee,
   approval,
   attendance,
-  department,
-  employee,
   permission,
-  role,
   salary,
   social
 ]
