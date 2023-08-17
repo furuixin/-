@@ -28,7 +28,7 @@
 
 若存在于白名单就对其放行,
 
-<img src="https://furuixin-1317686530.cos.ap-nanjing.myqcloud.com/%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E8%B5%84%E6%96%99.jpg" alt="示意图" style="transform: rotate(270deg); zoom: 33%;" />
+<img src="https://furuixin-1317686530.cos.ap-nanjing.myqcloud.com/%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E8%B5%84%E6%96%99.jpg" alt="示意图" style="transform: rotate(270deg); zoom: 50%;" />
 
 ## 登录
 

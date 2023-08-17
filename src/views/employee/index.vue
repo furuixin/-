@@ -1,164 +1,158 @@
 <template>
-    <!-- 员工管理 -->
-    <div class='employee'>
-        <div class="employee_content">
-            <div class="left">
-                <el-input style="margin-bottom:10px" placeholder="请输入员工姓名全员搜索" size="small" prefix-icon="el-icon-search"
-                    v-model="queryParams.keyword" @change="searchValue"></el-input>
-                <el-tree node-key="id" ref="deptTree" :data="dept" :props="defaultProps" default-expand-all
-                    :expand-on-click-node="false" :highlight-current="true" @current-change="selNode"></el-tree>
-            </div>
-            <div class="right">
-                <el-row class="buttons" type="flex" justify="end">
-                    <el-button type="primary" size="small">添加员工</el-button>
-                    <el-button size="small" @click="importExcel">excel导入</el-button>
-                    <el-button size="small" @click="downloadExcel">excel导出</el-button>
-                </el-row>
-                <el-table :data="list" :header-cell-style="{ 'background-color': '#f5f6f8' }">
-                    <el-table-column label="头像">
-                        <template #default="scope">
-                            <el-avatar v-if="scope.row.staffPhoto" :src="scope.row.staffPhoto"
-                                style="width: 30px;height: 30px;line-height: 30px;"></el-avatar>
-                            <div v-else class="username">{{ scope.row.username.charAt(0) }}</div>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="username" label="姓名"></el-table-column>
-                    <el-table-column prop="mobile" label="手机号" sortable></el-table-column>
-                    <el-table-column prop="workNumber" label="工号" sortable></el-table-column>
-                    <el-table-column label="聘用形式">
-                        <template #default="scope">
-                            <span v-if="scope.row.formOfEmployment == 1">正式</span>
-                            <span v-else>非正式</span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="departmentName" label="部门"></el-table-column>
-                    <el-table-column prop="timeOfEntry" label="入职时间" sortable></el-table-column>
-
-                    <el-table-column label="操作" fixed="right" width="180">
-                        <template slot-scope="scope">
-                            <el-button type="text" @click="$router.push(`/employee/detail/${scope.row.id}`)">查看</el-button>
-                            <el-button type="text">角色</el-button>
-                            <el-button type="text">删除</el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
-                <el-row type="flex" justify="end" align="middle" style="height: 60px;">
-                    <el-pagination @current-change="getEmployeeList" :current-page.sync="queryParams.page"
-                        :page-size="queryParams.pagesize" layout="total, prev, pager, next" :total="queryParams.total">
-                    </el-pagination>
-                </el-row>
-            </div>
-        </div>
-        <importExcel :dialogVisible.sync="dialogVisible" @uploadExcel="getEmployeeList()"></importExcel>
+  <div class="container">
+    <div class="app-container">
+      <div class="left">
+        <el-input v-model="queryparams.keyword" @input="changeValue" style="margin-bottom:10px" type="text"
+          prefix-icon="el-icon-search" size="small" placeholder="输入员工姓名全员搜索" />
+        <el-tree ref="deptTree" :data="dept" node-key="id" :props="defaultProps" default-expand-all
+          :expand-on-click-node="false" highlight-current @current-change="selectNode">
+        </el-tree>
+      </div>
+      <div class="right">
+        <el-row class="opeate-tools" type="flex" justify="end">
+          <el-button v-permission="'employee'" size="mini" type="primary"
+            @click="$router.push('/employee/detail')">添加员工</el-button>
+          <el-button size="mini" @click="showExcelDialog = true">excel导入</el-button>
+          <el-button size="mini" @click="exportExcelEmploy">excel导出</el-button>
+        </el-row>
+        <el-table :data="list">
+          <el-table-column prop="staffPhoto" label="头像" align="center">
+            <template v-slot="{ row }">
+              <el-avatar v-if="row.staffPhoto" :src="row.staffPhoto"></el-avatar>
+              <span v-else class="username">{{ row.username.charAt(0) }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="username" label="姓名" align="center"></el-table-column>
+          <el-table-column prop="mobile" label="手机号" align="center"></el-table-column>
+          <el-table-column prop="workNumber" label="工号" align="center"></el-table-column>
+          <el-table-column prop="formOfEmployment" label="聘用形式" align="center">
+            <template v-slot="{ row }">
+              <span>{{ row.formOfEmployment === 1 ? '正式' : '非正式' }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="departmentName" label="部门" align="center"></el-table-column>
+          <el-table-column prop="timeOfEntry" label="入职事件" align="center"></el-table-column>
+          <el-table-column label="操作" align="center">
+            <template v-slot="{ row }">
+              <el-button @click="$router.push(`/employee/detail/${row.id}`)">查看</el-button>
+              <el-button @click="btnRole(row)">角色</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
     </div>
+    <importExcel :showExcelDialog.sync="showExcelDialog" @uploadSuccess="getEmployeeList"></importExcel>
+    <addRole :showRoleDialog.sync="showRoleDialog" :currentEmployeeId="currentEmployeeId" ref="roleRef"></addRole>
+  </div>
 </template>
- 
+  
 <script>
-import { getDepartment } from "@/api/department";
-import { transListToTreeData } from '@/utils/transListToTreeData'
-import { getEmployeeList, downloadExcel } from "@/api/employee";
-import { saveAs } from 'file-saver'
-import importExcel from "./components/importExcel.vue";
+import addRole from './components/addRole.vue'
+import { getDepartment } from '@/api/department'
+import { getEmployeeList, exportEmployee } from '@/api/employee'
+import { transListToTreeData } from '@/utils/index'
+import { saveAs } from 'file-saver';
+import importExcel from './components/import-excel.vue'
 export default {
-    components: {
-        importExcel
+  name: 'Employee',
+  components: { importExcel, addRole },
+  data() {
+    return {
+      currentEmployeeId: null,
+      showRoleDialog: false,
+      showExcelDialog: false,
+      dept: [],
+      defaultProps: {
+        'label': "name",
+        "children": "children"
+      },
+      list: [],
+      queryparams: {
+        departmentId: null,
+        page: 1,
+        pagesize: 10,
+        keyword: "",
+      },
+      timer: null
+
+    }
+  },
+  created() {
+    this.getDepartment()
+    this.getEmployeeList()
+  },
+  methods: {
+    async btnRole(row) {
+      this.showRoleDialog = true
+      this.currentEmployeeId = row.id
+      await this.$nextTick()
+      this.$refs.roleRef.getEmployeeDetail()
     },
-    data() {
-        return {
-            dept: [],
-            defaultProps: {
-                label: 'name',
-                children: 'children'
-            },
-            queryParams: {
-                departmentId: null,
-                page: 1,
-                pagesize: 10,
-                total: 0,
-                keyword: ''
-            },
-            list: [],
-            dialogVisible: false,
-        }
+    async getDepartment() {
+      let res = await getDepartment()
+      this.dept = transListToTreeData(res, 0)
+      this.queryparams.departmentId = this.dept[0].id
+      this.$nextTick(() => {
+        this.$refs.deptTree.setCurrentKey(this.queryparams.departmentId)
+      })
     },
-    created() {
-        this.getDepartment()
+    selectNode(node) {
+      console.log(node, "node")
+      this.queryparams.departmentId = node.id
+      this.getEmployeeList()
+    },
+    async getEmployeeList() {
+      let res = await getEmployeeList(this.queryparams)
+      let { rows, total } = res
+      this.list = rows
+    },
+    changeValue() {
+      if (this.timer) clearTimeout(this.timer)
+      this.timer = setTimeout(() => {
+        this.queryparams.page = 1
         this.getEmployeeList()
+      }, 300)
+
     },
-    methods: {
-        async getDepartment() {
-            let res = await getDepartment()
-            this.dept = transListToTreeData(res.data, 0)
-            this.queryParams.departmentId = this.dept[0].id
-            this.$nextTick(() => {
-                this.$refs.deptTree.setCurrentKey(this.queryParams.departmentId)
-            })
-        },
-        selNode(node) {
-            this.queryParams = {
-                departmentId: null,
-                page: 1,
-                pagesize: 10,
-                total: 0
-            }
-            this.queryParams.departmentId = node.id
-            this.getEmployeeList()
-        },
-        async getEmployeeList() {
-            let res = await getEmployeeList(this.queryParams)
-            this.list = res.data.rows
-            this.queryParams.total = res.data.total
-        },
-        searchValue() {
-            this.queryParams.page = 1
-            this.getEmployeeList()
-        },
-        async downloadExcel() {
-            const res = await downloadExcel()
-            saveAs(res, '员工信息标.xlsx')
-        },
-        importExcel() {
-            this.dialogVisible = true
-        }
-    },
+    async exportExcelEmploy() {
+      let res = await exportEmployee()
+      console.log(res, "excel")
+      saveAs(res, '员工信息表.xlsx')
+    }
+  }
 }
 </script>
- 
-<style lang='scss' scoped>
-.employee {
+  
+<style lang="scss" scoped>
+.app-container {
+  background: #fff;
+  display: flex;
+
+  .left {
+    width: 280px;
     padding: 20px;
-    min-height: calc(100vh - 80px);
+    border-right: 1px solid #eaeef4;
+  }
 
-    .employee_content {
-        display: flex;
-        background-color: white;
+  .right {
+    flex: 1;
+    padding: 20px;
 
-        .left {
-            width: 280px;
-            padding: 20px;
-            border-right: 1px solid #eaeef4;
-        }
-
-        .right {
-            flex: 1;
-            padding: 20px;
-
-            .buttons {
-                margin: 10px;
-            }
-
-            .username {
-                height: 30px;
-                width: 30px;
-                line-height: 30px;
-                text-align: center;
-                border-radius: 50%;
-                color: #fff;
-                background: #04c9be;
-                font-size: 12px;
-                display: inline-block;
-            }
-        }
+    .opeate-tools {
+      margin: 10px;
     }
+
+    .username {
+      height: 30px;
+      width: 30px;
+      line-height: 30px;
+      text-align: center;
+      border-radius: 50%;
+      color: #fff;
+      background: #04C9BE;
+      font-size: 12px;
+      display: inline-block;
+    }
+  }
 }
 </style>

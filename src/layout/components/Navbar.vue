@@ -7,23 +7,26 @@
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img :src="avatar" v-if="avatar" class="user-avatar">
-          <span v-else class="username"> {{ name.charAt(0) }}</span>
+          <img :src="avatar" class="user-avatar" v-if="avatar">
+          <span class="username" v-else>{{ name.charAt(0) }}</span>
+          
+          <i>{{ name }}</i>
+          <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
           <router-link to="/">
             <el-dropdown-item>
-              首页
+              Home
             </el-dropdown-item>
           </router-link>
           <a target="_blank" href="https://github.com/PanJiaChen/vue-admin-template/">
-            <el-dropdown-item>模板地址</el-dropdown-item>
+            <el-dropdown-item>Github</el-dropdown-item>
           </a>
-          <a target="_blank" href="https://github.com/furuixin/Backstage">
-            <el-dropdown-item>源码地址</el-dropdown-item>
+          <a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/#/">
+            <el-dropdown-item>Docs</el-dropdown-item>
           </a>
           <el-dropdown-item divided @click.native="logout">
-            <span style="display:block;">登出</span>
+            <span style="display:block;">Log Out</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -44,9 +47,7 @@ export default {
   computed: {
     ...mapGetters([
       'sidebar',
-      // 读取头像
       'avatar',
-      //读取用户名
       'name'
     ])
   },
@@ -63,12 +64,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.username{
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  border-radius: 50%;
+  background-color: yellow;
+  color: pink;
+  margin-right: 5px;
+}
 .navbar {
   height: 50px;
   overflow: hidden;
   position: relative;
   background: #fff;
-  box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
+  box-shadow: 0 1px 4px rgba(0,21,41,.08);
 
   .hamburger-container {
     line-height: 46px;
@@ -76,7 +89,7 @@ export default {
     float: left;
     cursor: pointer;
     transition: background .3s;
-    -webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color:transparent;
 
     &:hover {
       background: rgba(0, 0, 0, .025)

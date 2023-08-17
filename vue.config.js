@@ -13,7 +13,7 @@ const name = defaultSettings.title || 'vue Admin Template' // page title
 // For example, Mac: sudo npm run
 // You can change the port by the following methods:
 // port = 9528 npm run dev OR npm run dev --port = 9528
-const port = process.env.port || process.env.npm_config_port || 9528 // dev port
+const port = process.env.port || process.env.npm_config_port || 9529 // dev port
 
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
@@ -36,11 +36,12 @@ module.exports = {
       warnings: false,
       errors: true
     },
-    proxy: {
-      '/api': { // 代理标识, 如果出现了这个就代表需要代理
-        target: 'https://heimahr.itheima.net'
+    proxy:{
+      '/api':{
+        // target:'https://heimahr.itheima.net'
+        target:'https://heimahr.itheima.net'
       }
-    },
+    }
     // before: require('./mock/mock-server.js')
   },
   configureWebpack: {
@@ -92,7 +93,7 @@ module.exports = {
             .plugin('ScriptExtHtmlWebpackPlugin')
             .after('html')
             .use('script-ext-html-webpack-plugin', [{
-              // `runtime` must same as runtimeChunk name. default is `runtime`
+            // `runtime` must same as runtimeChunk name. default is `runtime`
               inline: /runtime\..*\.js$/
             }])
             .end()

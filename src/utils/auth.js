@@ -1,13 +1,11 @@
-const my_token = 'HR TOKEN'
+const TokenKey = 'MY_TOKEN_KEY'
 
 export function getToken() {
-  return localStorage.getItem(my_token)
+  return localStorage.getItem(TokenKey)
 }
-
 export function setToken(token) {
-  return localStorage.setItem(my_token, token)
+  return localStorage.setItem(TokenKey, token)
 }
-
 export function removeToken() {
-  return localStorage.removeItem(my_token)
+  return localStorage.removeItem(TokenKey)
 }

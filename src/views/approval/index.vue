@@ -1,12 +1,13 @@
 <template>
- <!-- 审批管理 -->
-<div class='approval'></div>
-  
+    <div>
+        这是审核页
+    </div>
 </template>
- 
+
 <script>
+export default {
+
+}
 </script>
- 
-<style lang='scss' scoped>
- 
-</style>
+
+<style lang="scss" scoped></style>

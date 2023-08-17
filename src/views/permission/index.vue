@@ -1,12 +1,15 @@
 <template>
- <!-- 权限管理 -->
-<div class='permission'></div>
-  
+    <div class="permission">
+        这是权限页
+    </div>
 </template>
- 
+
 <script>
+    export default {
+        
+    }
 </script>
- 
-<style lang='scss' scoped>
- 
+
+<style lang="scss" scoped>
+
 </style>

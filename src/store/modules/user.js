@@ -1,54 +1,49 @@
-import { getToken, setToken, removeToken } from '@/utils/auth'
-import { login, getUserInfo } from '@/api/user'
-const getDefaultState = () => {
+import {setToken,getToken,removeToken} from '@/utils/auth'
+import {login,getUserInfo} from '@/api/user'
+
+
+const state = ()=>{
   return {
-    //  token:null
-    token: getToken(),
-    userInfo: {}
+     token:getToken(),
+     userInfo:{}
   }
 }
-const state = getDefaultState()
-const mutations = {
-  // 存token
-  setToken(state, token) {
-    state.token = token
-    // 本地存储
+
+const mutations={
+  setToken(state,token){
+    console.log(token)
+    state.token=token
     setToken(token)
   },
-  // 删token
-  removeToken(state) {
+  removeToken(state){
     state.token = null
-    // 删除本地
     removeToken()
   },
-  // 存储用户资料
-  setUserInfo(state, userInfo) {
-    state.userInfo = userInfo
+  setUserInfo(state,user){
+    state.userInfo = user
   }
 }
-const actions = {
-  // 登录的请求的方法
-  async login(state, data) {
 
-    let res = await login(data)
-    console.log(res.data)
-    //  提交commit 存储token
-    state.commit('setToken', res.data)
-  },
-  // 异步获取用户资料
-  async getUserInfo({ commit }) {
+const actions = {
+ async login({commit},data){
+   let res = await login(data)
+    commit('setToken',res)
+  } ,
+  async getUserInfo({commit}) {
     const result = await getUserInfo()
-    commit('setUserInfo', result.data)
+    commit('setUserInfo',result)
+    return result
   },
-  logout({commit}){
-    //  删除token
+   logout({commit}){
     commit('removeToken')
-    // 删除用户资料
     commit('setUserInfo',{})
+     
+  }
 }
-}
+
+
 export default {
-  namespaced: true,
+  namespaced:true,
   state,
   mutations,
   actions

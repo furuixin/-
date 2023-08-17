@@ -1,6 +1,7 @@
 import Layout from '@/layout'
 export default {
     path:'/approval',
+    name:'approval',
     component:Layout,
     children:[
       {
@@ -8,7 +9,7 @@ export default {
         name:"approval",
         component: () => import('@/views/approval/index'),
         meta:{
-          icon:"tree-table",
+          icon:"example",
           title:'审批'
         }
       }

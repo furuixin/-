@@ -3,45 +3,46 @@ import store from './store'
 import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
-import { getToken } from '@/utils/auth' // get token from cookie
-import getPageTitle from '@/utils/get-page-title'
+import { MyRoutes } from '@/router/index'
 
-NProgress.configure({ showSpinner: false }) // NProgress Configuration
+
+NProgress.configure({ showSpinner: false })
 
 // 白名单
-const whiteList = ['/login', '/404'] // no redirect whitelist
+const whiteList = ['/login', '/404']
 
 router.beforeEach(async (to, from, next) => {
-  NProgress.start();
-  // 1.判断是否有token
+  NProgress.start()
   if (store.getters.token) {
-    // 登录状态   判断是否是登录页  是---  免登录   否   next(
     if (to.path === '/login') {
       next('/')
-      // next(地址) 不会执行后置守卫
-      NProgress.done()
     } else {
-      // 获取用户资料
-      // 判断是否有用户资料
-      if (!store.getters.userInfo) {
-        await store.dispatch('user/getUserInfo')
-      }
-      next()  //放行
-    }
+      if (!store.getters.userId) {
+        let result = await store.dispatch('user/getUserInfo')
+        console.log(result.roles.menus, MyRoutes, "用户标识")
+        let filterRouter = MyRoutes.filter(item => {
+          console.log(item.name, 0)
+          return result.roles.menus.includes(item.name)
+        })
+        store.commit('routersMol/setRoutes', filterRouter)
+        router.addRoutes([...filterRouter, { path: '*', redirect: '/404', hidden: true }])
 
+      }
+      next()
+    }
   } else {
-    // 非登录状态  是否在白名单中 在就放行   不在就跳转到登录页
+    // 没有token
     if (whiteList.includes(to.path)) {
       next()
     } else {
       next('/login')
-      NProgress.done()
     }
   }
+
+
 })
 
 router.afterEach(() => {
   // finish progress bar
   NProgress.done()
 })
-

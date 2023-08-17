@@ -1,6 +1,7 @@
 import Layout from '@/layout'
 export default {
     path:'/role',
+    name:'role',
     component:Layout,
     children:[
       {
@@ -8,7 +9,7 @@ export default {
         name:"role",
         component: () => import('@/views/role/index'),
         meta:{
-          icon:"setting",
+          icon:"example",
           title:'角色'
         }
       }

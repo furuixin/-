@@ -1,12 +1,15 @@
 <template>
- <!-- 考勤管理 -->
-<div class='attendance'></div>
-  
+    <div>
+        这是考勤页
+    </div>
 </template>
- 
+
 <script>
+    export default {
+        
+    }
 </script>
- 
-<style lang='scss' scoped>
- 
+
+<style lang="scss" scoped>
+
 </style>

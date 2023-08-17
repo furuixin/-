@@ -27,6 +27,7 @@
 <script>
 import { mapActions } from 'vuex'
 export default {
+  name: 'Login',
   data() {
     const isAgreeFn = (rule, value, callback) => {
       // rule规则 value数据 true/false  callback 回调函数 执行函数
@@ -75,7 +76,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .login {
   height: 100vh;
   display: flex;

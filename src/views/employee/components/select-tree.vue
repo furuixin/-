@@ -1,18 +1,24 @@
-<!-- 详情页的部门选择器 -->
 <template>
-    <el-cascader :options="treeData" :props="defaultProps" separator="-">
-    </el-cascader>
+    <el-cascader :value="value" size="mini" :options="treeData" :props="props" separator="-"
+        @change="changeValue"></el-cascader>
 </template>
+
 <script>
 import { getDepartment } from '@/api/department'
-import { transListToTreeData } from '@/utils/transListToTreeData'
+import { transListToTreeData } from '@/utils/index.js'
 export default {
+    props: {
+        value: {
+            type: Number,
+            default: null
+        }
+    },
     data() {
         return {
             treeData: [],
-            defaultProps: {
-                label: 'name',
-                value: 'id'
+            props: {
+                label: "name",
+                value: "id"
             }
         }
     },
@@ -22,9 +28,17 @@ export default {
     methods: {
         async getDepartment() {
             let res = await getDepartment()
-            console.log(res);
-            this.treeData = transListToTreeData(res.data, 0)
+            this.treeData = transListToTreeData(res, 0)
+        },
+        changeValue(v) {
+            if (v.length > 0) {
+                this.$emit('input', v[v.length - 1])
+            } else {
+                this.$emit('input', null)
+            }
         }
     }
 }
 </script>
+
+<style lang="scss" scoped></style>

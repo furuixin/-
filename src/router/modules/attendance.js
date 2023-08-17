@@ -1,6 +1,7 @@
 import Layout from '@/layout'
 export default {
     path:'/attendance',
+    name:'attendance',
     component:Layout,
     children:[
       {
@@ -8,7 +9,7 @@ export default {
         name:"attendance",
         component: () => import('@/views/attendance/index'),
         meta:{
-          icon:"excel",
+          icon:"email",
           title:'考勤'
         }
       }

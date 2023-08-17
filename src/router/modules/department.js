@@ -1,6 +1,8 @@
+
 import Layout from '@/layout'
 export default {
     path:'/department',
+    name:'department',
     component:Layout,
     children:[
       {
@@ -8,8 +10,8 @@ export default {
         name:"department",
         component: () => import('@/views/department/index'),
         meta:{
-          icon:"tree",
-          title:'组织'
+          icon:"",
+          title:'组织架构'
         }
       }
     ]
